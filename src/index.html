@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通讯录应用</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .contact-form {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .contact-form input {
+            margin-right: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .contact-form button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .contact-list {
+            list-style: none;
+            padding: 0;
+        }
+        .contact-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .contact-item button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <h1>通讯录应用</h1>
+        <div class="contact-form">
+            <input type="text" id="name" placeholder="姓名">
+            <input type="text" id="phone" placeholder="电话">
+            <input type="text" id="email" placeholder="邮箱">
+            <button id="addContact">添加联系人</button>
+        </div>
+        <ul id="contactList" class="contact-list"></ul>
+    </div>
+
+    <script>
+        // 模拟通讯录数据
+        let contacts = [
+            { id: 1, name: '张三', phone: '13800138000', email: 'zhangsan@example.com' },
+            { id: 2, name: '李四', phone: '13900139000', email: 'lisi@example.com' }
+        ];
+
+        // 渲染联系人列表
+        function renderContacts() {
+            const contactList = document.getElementById('contactList');
+            contactList.innerHTML = '';
+            
+            contacts.forEach(contact => {
+                const li = document.createElement('li');
+                li.className = 'contact-item';
+                li.innerHTML = `
+                    <div>
+                        <strong>${contact.name}</strong><br>
+                        电话: ${contact.phone}<br>
+                        邮箱: ${contact.email}
+                    </div>
+                    <div>
+                        <button onclick="deleteContact(${contact.id})">删除</button>
+                    </div>
+                `;
+                contactList.appendChild(li);
+            });
+        }
+
+        // 添加联系人
+        function addContact() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            
+            if (name && phone) {
+                const newContact = {
+                    id: Date.now(),
+                    name,
+                    phone,
+                    email: email || ''
+                };
+                
+                contacts.push(newContact);
+                renderContacts();
+                
+                // 清空表单
+                document.getElementById('name').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('email').value = '';
+            }
+        }
+
+        // 删除联系人
+        function deleteContact(id) {
+            contacts = contacts.filter(contact => contact.id !== id);
+            renderContacts();
+        }
+
+        // 绑定添加联系人按钮事件
+        document.getElementById('addContact').addEventListener('click', addContact);
+        
+        // 初始化渲染
+        renderContacts();
+    </script>
+</body>
+</html>
